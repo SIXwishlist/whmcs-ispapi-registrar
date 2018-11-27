@@ -38,7 +38,7 @@ NOTE: We introduced sematic-release starting with v1.0.63. This is why older Rel
 
 Download the ZIP archive including the latest release version [here](https://github.com/hexonet/whmcs-ispapi-registrar/raw/master/whmcs-ispapi-registrar-latest.zip).
 
-## Minimum Requirements ##
+### Minimum Requirements ###
 
 For the latest WHMCS minimum system requirements, please refer to
 [https://docs.whmcs.com/System_Requirements](https://docs.whmcs.com/System_Requirements)
@@ -75,10 +75,12 @@ More information about the Domain Sync can be found [here](http://docs.whmcs.com
 
 ### Nameservers ###
 
-If you want to use DNS, URL or Email forwarding, domains must resolve to the ISPAPI nameserver cluster (ns1.ispapi.net, ns2.ispapi.net, ns3.ispapi.net).
+If you want to use DNS, URL or Email forwarding, domains must resolve to the ISPAPI nameserver cluster (**ns1.ispapi.net, ns2.ispapi.net, ns3.ispapi.net**).
 
 You might want to enter them in `Setup > General Settings > Domains` as Default Nameservers for your customers:
+
 picture TODO
+
 You can also create your own nameserver hostnames and use them, as long as they are registered and resolve to the correct IP addresses.
 
 ### Widget activation ###
@@ -94,18 +96,20 @@ The registration of some extensions requires sometimes additional domain fields.
 In order to provide this additional fields on the registration page and map them with our module you have to extend the **$additionaldomainfields** array.
 
 `Prior to WHMCS 7.0, this file was located at /includes/additionaldomainfields.php`
+
 `From WHMCS 7.0 on, to add new additional domains fields, create a new file named additionalfields.php within the /resources/domains/ directory.`
 
 Our module supports the following config fields: **Ispapi-Name, Ispapi-Options, Ispapi-Replacements, Ispapi-IgnoreForCountries** and **Ispapi-Eval**.
 
-    * **Ispapi-Name** (string): Name of the parameter in Ispapi
-    * **Ispapi-Options** (string): Comma-separated list of parameter values, the order must match the ones in **Options**. The mapping of values from Options to **Ispapi-Options** is stored in **Ispapi-Replacements**
-    * **Ispapi-Replacements** (array): If the parameter value is a valid key of this array, it gets replaced by the respective value. Indirect use via Ispapi-Options is preferred, direct use makes sense to map older values for backwards compatibility.
-    * **Ispapi-Eval** (string): PHP code to execute, the parameter value after all replacements is stored in $value
+    - **Ispapi-Name** (string): Name of the parameter in Ispapi
+    - **Ispapi-Options** (string): Comma-separated list of parameter values, the order must match the ones in **Options**. The mapping of values from Options to **Ispapi-Options** is stored in **Ispapi-Replacements**
+    - **Ispapi-Replacements** (array): If the parameter value is a valid key of this array, it gets replaced by the respective value. Indirect use via Ispapi-Options is preferred, direct use makes sense to map older values for backwards compatibility.
+    - **Ispapi-Eval** (string): PHP code to execute, the parameter value after all replacements is stored in $value
 
 In our module you will find a file named “additionaldomainfields_sample.php” containing a lot of preconfigured extensions running with our systems. (updated on a regular basis) This file will assist you configuring the WHMCS additional domain fields.
 
 Examples:
+
     `// Maps the "Application Purpose" value on the Ispapi parameter
     // "X-US-NEXUS-APPPURPOSE".
     // e.g. for "Government purposes": X-US-NEXUS-APPPURPOSE=P5
@@ -116,9 +120,9 @@ Examples:
                     "Ispapi-Options" => ",P1,P2,P3,P4,P5",
                     "Options" => ",P1 - Business use for profit,P2 - Non-profit business; club; association; religious organization; etc.,P3 - Personal Use,P4 - Educational purposes,P5 - Government purposes",
                     "Default" => "",
-                    "Required" => true`
+                    "Required" => true
 
-    `// Maps the "Nexus Country" value on the Ispapi parameter
+    // Maps the "Nexus Country" value on the Ispapi parameter
     // "X-US-NEXUS-VALIDATOR", converting to uppercase.
     // e.g. for "de": X-US-NEXUS-VALIDATOR=DE
     $additionaldomainfields[".us"][] = array(
@@ -130,9 +134,9 @@ Examples:
             "Required" => false,
             "Ispapi-Name" => "X-US-NEXUS-VALIDATOR",
             "Ispapi-Eval" => '$value = strtoupper($value);'
-    );`
+    );
 
-    `// Custom local presence service for .it
+    // Custom local presence service for .it
     $my_local_presence = array(
             "FIRSTNAME" => "John",
             "LASTNAME" => "Doe",
@@ -157,11 +161,12 @@ Examples:
                     $command["OWNERCONTACT0"] = $my_local_presence;
                     $command["ADMINCONTACT0"] = $my_local_presence;
             }'
-    );`
+    );
 
 ### HEXONET as Lookup Provider ###
 
 The HEXONET lookup provider yields high performance availability checks of the domains using our fast API. For the domains that are not supported by HEXONET, the lookup fallbacks to WHOIS. In order to utilize this feature, you just have to choose “HEXONET” (The one with the logo HEXONET ISPAPI) in the lookup provider suggestions.
+
 `Setup > Products/Services > Domain Pricing`
 
 picture-TODO
@@ -228,23 +233,28 @@ picture-TODO
 
 ### Special features ###
 
-**.CA Registrant WHOIS Privacy**
+#### .CA Registrant WHOIS Privacy ####
+
 The new WHOIS Privacy page for .CA domain names looks as follows (protection is enabled in example):
 
 picture-TODO
 
-**.CA Change of Registrant**
+#### .CA Change of Registrant ####
+
 The Change of Registrant page for .CA domain names is available under the Management Tools of a .CA domain.
 
-**.IT .CH .SE .SG .LI Change of Registrant**
+#### .IT .CH .SE .SG .LI Change of Registrant ####
+
 The change of Registrant of these TLDs requires a special procedure called TRADE. This function is available under the Management Tools of the domain.
 
-**.SWISS Registrations**h
+#### .SWISS Registrations ####
+
 Our registrar module is now supporting .SWISS registrations. (This function requires WHMCS 6.x)
 .SWISS domain names are different and cannot be registered with the normal **AddDomain** command.
 In order to apply for a .SWISS domain name it is always required to request a domain application with the **AddDomainApplication** command and to provide the class 'GOLIVE'.
 
 Moreover .SWISS registrations require 2 additional domain fields. Please add the following code at the end of the **/resources/domains/additionalfields.php** file:
+
 `## .SWISS DOMAIN REQUIREMENTS ##
 $additionaldomainfields[".swiss"] = array();
 $additionaldomainfields[".swiss"][] = array(
@@ -266,10 +276,10 @@ This function uses HOOKS and in order to activate these hooks you have to go to:
 
 **Example of a .SWISS registration:**
 
-    * Customer register a .SWISS domain (like he will register a normal domain)
-    * Once the invoice paid, the domain application will be sent
-    * The domain will be set to PENDING until the application process has been completed
-    * A cron job is checking the application status once a day
+    - Customer register a .SWISS domain (like he will register a normal domain)
+    - Once the invoice paid, the domain application will be sent
+    - The domain will be set to PENDING until the application process has been completed
+    - A cron job is checking the application status once a day
         - If the application is successful the domain will be set to ACTIVE and the customer will be able to manage it.
         - If the application is failed, the domain will be set to CANCELLED and you will have to refund the customer manually.
 
@@ -286,11 +296,15 @@ In this file you will find 2 &lt;select&gt; tags. In the first you will have to 
 `<option value="SRV"{if $dnsrecord.type eq "SRV"} selected="selected"{/if} >SRV</option>`
 
 In the second you should add:
+
 `<option value="SRV">SRV</option>`
 
 Between the 2 tags  there is an if statement, here you have to replace
+
 `{if $dnsrecord.type eq "MX"}`
+
 with
+
 `{if $dnsrecord.type eq "MX" || $dnsrecord.type eq "SRV"}`
 
 Now you are ready to support SRV records !
